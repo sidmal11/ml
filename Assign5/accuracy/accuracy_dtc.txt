@@ -1,0 +1,5 @@
+Accuracy For dtc for fold 0 is : 0.9333333333333333
+Accuracy For dtc for fold 1 is : 0.9666666666666667
+Accuracy For dtc for fold 2 is : 1.0
+Accuracy For dtc for fold 3 is : 0.9
+Accuracy For dtc for fold 4 is : 0.9333333333333333
