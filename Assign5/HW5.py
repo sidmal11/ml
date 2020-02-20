@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
 
 # Importing necessary files
 import pandas as pd
@@ -128,7 +133,7 @@ for i in range(5):
 
 
 # reshaping in a matrix
-acc_knn = acc_knn.reshape(5,max_neighbors)
+acc_knn = acc_knn.reshape(int(max_neighbors/5),max_neighbors)
 
 # average mean of k= 0-max_neighbours for all 5 fold cross sets
 mean_knn_accuracy = np.mean(acc_knn,axis=0)
@@ -153,7 +158,7 @@ plt.title("Mean Accuracy vs K")
 plt.show()
 
 
-# We can see that average mean accuracy is greatest for k=7
+# We can see that average mean accuracy is greatest for k=8 i.e. mean_knn_accuracy[7]
 # So this is the best k
 
 # In[13]:
@@ -179,3 +184,105 @@ plt.show()
 # For the decision tree, the high classification error rate while training set is small in comparison with the number of classes
 
 # The code and the data can be found at https://github.com/sidmal11/ml/tree/master/Assign5
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
