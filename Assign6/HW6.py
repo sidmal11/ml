@@ -57,10 +57,26 @@ def distance(a, b, ax=1, metric='e'):
     }
     return switcher.get(metric)
 
-def kmeans(X, Centroid=C, k=2, kmeans_metric='m',sse_criteria='n'):
+def kmeans(X, Centroid=C, k=2, kmeans_metric='m',criteria=0):
     
     max_iter = 100
     np.random.seed(89)
+    
+    if kmeans_metric=='m':
+        kmeans_cri = 'Manhattan'
+    elif kmeans_metric=='e':
+        kmeans_cri = 'Euclidean'
+    elif kmeans_metric=='j':
+        kmeans_cri = "Jacard"
+    elif kmeans_metric == 'c':
+        kmeans_cri = 'Cosine'
+    
+    if criteria==0:
+        cri='Centroids'
+    elif criteria ==1:
+        cri='sse'
+    elif criteria ==2:
+        cri = 'Max Iteration'
     
     if Centroid is None:
         Centroid = X[np.random.choice(len(X), size=k, replace=False)]
@@ -77,7 +93,9 @@ def kmeans(X, Centroid=C, k=2, kmeans_metric='m',sse_criteria='n'):
     count = 1
     sse_prev = 0.1
     sse_curr = 0
-    
+    print(" ")
+    print('Criteria is ',cri)
+    print('Distance metric is ',kmeans_cri)
     
     while (err.any() != 0 and count<=max_iter):
         
@@ -89,6 +107,7 @@ def kmeans(X, Centroid=C, k=2, kmeans_metric='m',sse_criteria='n'):
         # Storing the old centroid values
         old_C = deepcopy(Centroid)
         sse_curr = sse(X, clusters, Centroid)
+
         print('Iteration: ' + str(count) + ' Current SSE: ' + str(sse_curr) + ' Previous SSE: ' + str(sse_prev))
         
         # Finding the new centroids by taking the average value
@@ -99,11 +118,13 @@ def kmeans(X, Centroid=C, k=2, kmeans_metric='m',sse_criteria='n'):
         err_old = deepcopy(err)
         err = distance(Centroid, old_C, None,kmeans_metric)
         
-        if count>0:
-            if np.sum(err_old) == np.sum(err):
-                break
-            elif sse_prev<sse_curr and sse_criteria=='y':
-                break
+        
+        if np.sum(err_old) == np.sum(err) and criteria == 0 :
+            break
+        elif sse_prev<sse_curr and criteria==1:
+            break
+        elif count>0 and criteria==2:
+            break
             
         count= count+1
         sse_prev = sse_curr
@@ -117,7 +138,7 @@ def visualise_football(C_x, C_y,metric):
     # Plotting along with the Centroids
     plt.scatter(f1, f2, c='#050505')
     plt.scatter(C_x, C_y, marker='*', s=200, c='y')
-    clust, count = kmeans(X, Centroid=C, k=2,kmeans_metric=metric)
+    clust, count = kmeans(X, Centroid=C, k=2,kmeans_metric=metric, )
     print('Number of count: '+str(count))
     for i in range(k):
         points = np.array([X[j] for j in range(len(X)) if clust[j] == i])
@@ -145,11 +166,33 @@ def predict(clusters, y, k=3):
         
     return clusters
 
-def visualise_iris():
+def visualise_iris(kmeans_metric,criteria):
+    print("   ")
+    print("   ")
+
+    if kmeans_metric=='m':
+        kmeans_cri = 'Manhattan'
+    elif kmeans_metric=='e':
+        kmeans_cri = 'Euclidean'
+    elif kmeans_metric=='j':
+        kmeans_cri = "Jacard"
+    elif kmeans_metric == 'c':
+        kmeans_cri = 'Cosine'
+    
+    if criteria==0:
+        cri='Centroids'
+    elif criteria ==1:
+        cri='sse'
+    elif criteria ==2:
+        cri = 'Max Iteration'
     fig, ax = plt.subplots()
+    stringg = "Distance Criteria : " + kmeans_cri + " and Stopping Criteria : " +cri
+    plt.title(stringg)
     for i in range(3):
         points = np.array([X[j] for j in range(len(X)) if clusters[j] == i])
         ax.scatter(points[:, 0], points[:, 1], c=colors[i])
+    
+
         
 def print_accur():
     pred_val = predict(clusters, df['class'].values)
@@ -246,10 +289,13 @@ plt.scatter(X[:, 0], X[:, 1], c='black')
 # In[12]:
 
 
-clusters, count = kmeans(X, Centroid=None, k=3,kmeans_metric='e')
-print("number of count is ", str(int(count)))
-visualise_iris()
-print_accur()
+li =['e','c','j']
+for jtr in li: 
+    for itr in range(3):
+        clusters, count = kmeans(X, Centroid=None, k=3,kmeans_metric=jtr,criteria=itr)
+        print("number of count is ", str(int(count)))
+        visualise_iris(jtr,itr)
+        print_accur()
 
 
 # In[13]:
@@ -261,7 +307,7 @@ visualise_iris()
 print_accur()
 
 
-# In[14]:
+# In[ ]:
 
 
 clusters,count = kmeans(X, Centroid=None, k=3,kmeans_metric='c')
@@ -270,7 +316,7 @@ visualise_iris()
 print_accur()
 
 
-# In[15]:
+# In[ ]:
 
 
 clusters,count = kmeans(X, Centroid=None, k=3,kmeans_metric='e',sse_criteria='y')
@@ -279,7 +325,7 @@ visualise_iris()
 print_accur()
 
 
-# In[16]:
+# In[ ]:
 
 
 clusters,count = kmeans(X, Centroid=None, k=3,kmeans_metric='j',sse_criteria='y')
@@ -288,7 +334,7 @@ visualise_iris()
 print_accur()
 
 
-# In[17]:
+# In[ ]:
 
 
 clusters,count = kmeans(X, Centroid=None, k=3,kmeans_metric='c',sse_criteria='y')
