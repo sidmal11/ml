@@ -59,7 +59,7 @@ def distance(a, b, ax=1, metric='e'):
 
 def kmeans(X, Centroid=C, k=2, kmeans_metric='m',criteria=0):
     
-    max_iter = 100
+    max_iter = 99
     np.random.seed(89)
     
     if kmeans_metric=='m':
@@ -97,7 +97,7 @@ def kmeans(X, Centroid=C, k=2, kmeans_metric='m',criteria=0):
     print('Criteria is ',cri)
     print('Distance metric is ',kmeans_cri)
     
-    while (err.any() != 0 and count<=max_iter):
+    while(True):
         
         # Assigning each value to its closest cluster
         for i in range(len(X)):
@@ -118,12 +118,11 @@ def kmeans(X, Centroid=C, k=2, kmeans_metric='m',criteria=0):
         err_old = deepcopy(err)
         err = distance(Centroid, old_C, None,kmeans_metric)
         
-        
         if np.sum(err_old) == np.sum(err) and criteria == 0 :
             break
         elif sse_prev<sse_curr and criteria==1:
             break
-        elif count>0 and criteria==2:
+        elif count>100 and criteria==2:
             break
             
         count= count+1
@@ -296,51 +295,6 @@ for jtr in li:
         print("number of count is ", str(int(count)))
         visualise_iris(jtr,itr)
         print_accur()
-
-
-# In[13]:
-
-
-clusters,count = kmeans(X, Centroid=None, k=3,kmeans_metric='j')
-print("number of count is ", str(int(count)))
-visualise_iris()
-print_accur()
-
-
-# In[ ]:
-
-
-clusters,count = kmeans(X, Centroid=None, k=3,kmeans_metric='c')
-print("number of count is ", str(int(count)))
-visualise_iris()
-print_accur()
-
-
-# In[ ]:
-
-
-clusters,count = kmeans(X, Centroid=None, k=3,kmeans_metric='e',sse_criteria='y')
-print("number of count is ", str(int(count)))
-visualise_iris()
-print_accur()
-
-
-# In[ ]:
-
-
-clusters,count = kmeans(X, Centroid=None, k=3,kmeans_metric='j',sse_criteria='y')
-print("number of count is ", str(int(count)))
-visualise_iris()
-print_accur()
-
-
-# In[ ]:
-
-
-clusters,count = kmeans(X, Centroid=None, k=3,kmeans_metric='c',sse_criteria='y')
-print("number of count is ", str(int(count)))
-visualise_iris()
-print_accur()
 
 
 # In[ ]:
